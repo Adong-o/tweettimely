@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | TweetTimely</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle menu" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">TweetTimely</div>
+            </div>
+            <div class="nav-links">
+                <a href="#schedule" class="active">Schedule</a>
+                <a href="#analytics">Analytics</a>
+                <a href="#settings">Settings</a>
+            </div>
+            <div class="user-section">
+                <img src="https://randomuser.me/api/portraits/lego/1.jpg" alt="User" class="user-avatar">
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="dashboard-container">
+        <aside class="dashboard-sidebar">
+            <div class="account-info">
+                <h3>Account Overview</h3>
+                <div class="quick-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="scheduled-count">0</span>
+                        <span class="stat-label">Scheduled</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="published-count">0</span>
+                        <span class="stat-label">Published</span>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#compose" class="compose-btn">
+                    <i class="fas fa-plus"></i>
+                    New Tweet
+                </a>
+                <a href="#scheduled" class="active">
+                    <i class="far fa-clock"></i>
+                    Scheduled Tweets
+                </a>
+                <a href="#published">
+                    <i class="far fa-paper-plane"></i>
+                    Published Tweets
+                </a>
+                <a href="#analytics">
+                    <i class="far fa-chart-bar"></i>
+                    Analytics
+                </a>
+                <a href="#drafts">
+                    <i class="far fa-save"></i>
+                    Drafts
+                </a>
+                <a href="#settings">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </div>
+        </aside>
+
+        <main class="dashboard-main">
+            <div class="compose-section">
+                <h2>Compose Tweet</h2>
+                <div class="compose-box">
+                    <textarea placeholder="What's happening?" maxlength="280"></textarea>
+                    <div class="media-preview" id="media-preview"></div>
+                    <div class="compose-tools">
+                        <div class="compose-attachments">
+                            <label class="attachment-btn" title="Media">
+                                <i class="far fa-image"></i>
+                                <input type="file" accept="image/*,video/*" multiple hidden id="media-upload">
+                            </label>
+                            <button class="attachment-btn" title="GIF">
+                                <i class="fas fa-gift"></i>
+                            </button>
+                            <button class="attachment-btn" title="Poll">
+                                <i class="fas fa-poll-h"></i>
+                            </button>
+                            <button class="attachment-btn" title="Emoji">
+                                <i class="far fa-smile"></i>
+                            </button>
+                            <button class="attachment-btn" title="Location">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </button>
+                        </div>
+                        <div class="compose-actions">
+                            <div class="char-count">280</div>
+                            <div class="scheduling-options">
+                                <input type="datetime-local" id="schedule-time">
+                                <button class="schedule-btn">Schedule Tweet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scheduled-tweets">
+                <div class="section-header">
+                    <h2>Scheduled Tweets</h2>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                        <button class="view-btn" data-view="calendar">
+                            <i class="fas fa-calendar-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="tweets-view-container">
+                    <!-- List View (Default) -->
+                    <div class="tweets-list-view active" id="scheduled-tweets-list">
+                        <!-- Tweets will be populated here -->
+                    </div>
+
+                    <!-- Calendar View -->
+                    <div class="tweets-calendar-view">
+                        <div class="calendar-header">
+                            <button class="calendar-nav-btn" id="prevMonth">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h3 id="currentMonth">March 2024</h3>
+                            <button class="calendar-nav-btn" id="nextMonth">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="calendar-grid" id="calendar-grid">
+                            <!-- Calendar will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-overview">
+                <h2>Analytics Overview</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Engagement Rate</h3>
+                        <div class="analytics-value" id="engagement-rate">2.4%</div>
+                        <div class="analytics-trend positive">↑ 0.5%</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Impressions</h3>
+                        <div class="analytics-value" id="impressions">12.5K</div>
+                        <div class="analytics-trend positive">↑ 12%</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Profile Visits</h3>
+                        <div class="analytics-value" id="profile-visits">1.2K</div>
+                        <div class="analytics-trend positive">↑ 8%</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html> 

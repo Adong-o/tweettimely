@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email | TweetTimely</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="verify-email.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="verify-container">
+        <div class="verify-box">
+            <div class="verify-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <h1>Verify Your Email</h1>
+            <p>We've sent a verification link to your email address. Please check your inbox and click the link to verify your account.</p>
+            
+            <div class="verify-actions">
+                <button id="resend-email" class="resend-btn">
+                    <i class="fas fa-redo"></i>
+                    Resend Verification Email
+                </button>
+                <button id="check-status" class="check-btn">
+                    <i class="fas fa-sync"></i>
+                    Check Verification Status
+                </button>
+            </div>
+
+            <div class="verify-info">
+                <p>Already verified? <button id="refresh-page" class="refresh-btn">Refresh Page</button></p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="verify-email.js"></script>
+</body>
+</html> 

@@ -1,0 +1,891 @@
+/* Update Dashboard Layout */
+.dashboard-body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+.dashboard-nav {
+    background-color: white;
+    border-bottom: 1px solid var(--border-color);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1001;
+    height: 60px; /* Reduced height */
+}
+
+.dashboard-nav .nav-container {
+    height: 100%;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-nav .logo {
+    font-size: 1.4rem; /* Smaller logo */
+}
+
+.dashboard-nav .nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.dashboard-nav .nav-links a {
+    color: #4a5568;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.dashboard-nav .nav-links a.active {
+    color: var(--primary-color);
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+}
+
+.logout-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: white;
+    color: #4a5568;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: #f8f9fa;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+    margin-top: 60px;
+    padding: 1.5rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1400px;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+/* Sidebar Styles */
+.dashboard-sidebar {
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem;
+    height: calc(100vh - 90px);
+    position: sticky;
+    top: 75px;
+    border: 1px solid var(--border-color);
+}
+
+.account-info {
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.account-info h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 1rem;
+}
+
+.quick-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s ease;
+    border: 1px solid var(--border-color);
+}
+
+.stat:hover {
+    transform: translateY(-2px);
+    background: white;
+    border-color: var(--primary-color);
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.sidebar-menu a {
+    padding: 0.75rem 1rem;
+    color: #4a5568;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sidebar-menu a i {
+    font-size: 1.1rem;
+    width: 1.5rem;
+    text-align: center;
+    color: #64748b;
+}
+
+.sidebar-menu a:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+}
+
+.sidebar-menu a:hover i {
+    color: var(--primary-color);
+}
+
+.compose-btn {
+    background: var(--primary-color) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.75rem;
+}
+
+.compose-btn i {
+    color: white !important;
+}
+
+.compose-btn:hover {
+    background: var(--primary-dark) !important;
+    transform: translateY(-1px);
+}
+
+.sidebar-menu a.active {
+    background-color: rgba(29, 161, 242, 0.1);
+    color: var(--primary-color);
+}
+
+.sidebar-menu a.active i {
+    color: var(--primary-color);
+}
+
+/* Main Content Area */
+.dashboard-main {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Compose Section */
+.compose-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+.compose-section h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.compose-box {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 0;
+}
+
+.compose-box textarea {
+    width: 100%;
+    min-height: 120px;
+    border: none;
+    resize: none;
+    font-size: 1.1rem;
+    background: transparent;
+    margin-bottom: 1rem;
+    outline: none;
+    line-height: 1.5;
+}
+
+.media-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.preview-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: #f8f9fa;
+}
+
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.remove-media {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.remove-media:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+.compose-tools {
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.compose-attachments {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.attachment-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.attachment-btn:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+.compose-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.char-count {
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.char-count.warning {
+    color: #f59e0b;
+}
+
+.char-count.error {
+    color: #ef4444;
+}
+
+.scheduling-options {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.scheduling-options input[type="datetime-local"] {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.schedule-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.schedule-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* Analytics Section */
+.analytics-overview {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+.analytics-overview h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    color: #2d3748;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.analytics-card {
+    background: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.analytics-card h3 {
+    font-size: 0.9rem;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}
+
+.analytics-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0.25rem 0;
+}
+
+/* Scheduled Tweets Section */
+.scheduled-tweets {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+.scheduled-tweets h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.tweets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.scheduled-tweet {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.tweet-media {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.media-item {
+    position: relative;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.media-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.tweet-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.delete-btn {
+    background: none;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        grid-template-columns: 200px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .dashboard-container > aside {
+        display: none; /* Hide the desktop sidebar on mobile */
+    }
+
+    /* Mobile Sidebar */
+    .dashboard-sidebar {
+        position: fixed;
+        left: 0;
+        top: 60px;
+        bottom: 0;
+        width: 280px;
+        height: calc(100% - 60px);
+        transform: translateX(-100%);
+        z-index: 1000;
+        transition: transform 0.3s ease;
+        background: white;
+        border-radius: 0;
+        margin: 0;
+        padding: 1rem;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-sidebar.active {
+        transform: translateX(0);
+    }
+
+    .sidebar-toggle {
+        display: flex !important;
+    }
+
+    .dashboard-nav .nav-links {
+        display: none;
+    }
+}
+
+/* Hide mobile elements on desktop */
+@media (min-width: 769px) {
+    .sidebar-toggle {
+        display: none !important;
+    }
+
+    .dashboard-sidebar {
+        transform: none !important;
+    }
+}
+
+/* Add these styles for mobile sidebar */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sidebar-toggle {
+    display: none; /* Hidden by default */
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-toggle:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+.sidebar-overlay {
+    display: none !important; /* This will completely disable the overlay */
+}
+
+/* Update sidebar styles for clean sliding without overlay */
+@media (max-width: 768px) {
+    .dashboard-sidebar {
+        position: fixed;
+        left: 0;
+        top: 60px;
+        bottom: 0;
+        width: 280px;
+        transform: translateX(-100%);
+        z-index: 1000;
+        transition: transform 0.3s ease;
+        background: white;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-sidebar.active {
+        transform: translateX(0);
+    }
+}
+
+/* Add these styles for better mobile layout */
+.dashboard-body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-main {
+    flex: 1;
+    min-height: 0;
+}
+
+/* Update compose box for better mobile experience */
+.compose-box {
+    margin-bottom: 0;
+}
+
+/* Make buttons more touch-friendly on mobile */
+@media (max-width: 768px) {
+    .attachment-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .delete-btn {
+        padding: 0.5rem 1.25rem;
+    }
+
+    /* Improve spacing */
+    .compose-section,
+    .scheduled-tweets,
+    .analytics-overview {
+        margin-bottom: 1rem;
+    }
+
+    /* Better mobile typography */
+    .compose-box textarea {
+        font-size: 1rem;
+        min-height: 100px;
+    }
+
+    h2 {
+        font-size: 1.25rem !important;
+    }
+
+    /* Improve mobile nav */
+    .dashboard-nav .nav-container {
+        padding: 0 1rem;
+    }
+
+    .user-section {
+        gap: 0.5rem;
+    }
+
+    .logout-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Add smooth transitions */
+.dashboard-sidebar {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-overlay {
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s;
+}
+
+/* Add these styles for the view toggle and calendar */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 0.5rem;
+    background: #f1f5f9;
+    padding: 0.25rem;
+    border-radius: 8px;
+}
+
+.view-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-btn:hover {
+    color: var(--primary-color);
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.view-btn.active {
+    background: white;
+    color: var(--primary-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Calendar Styles */
+.tweets-view-container {
+    position: relative;
+    min-height: 400px; /* Add minimum height */
+}
+
+.tweets-list-view,
+.tweets-calendar-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    transform: translateX(50px);
+}
+
+.tweets-list-view.active,
+.tweets-calendar-view.active {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.calendar-nav-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.calendar-nav-btn:hover {
+    color: var(--primary-color);
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+.calendar-grid::before {
+    content: "Sun";
+    grid-column: 1;
+}
+.calendar-grid::before {
+    content: "Mon";
+    grid-column: 2;
+}
+.calendar-grid::before {
+    content: "Tue";
+    grid-column: 3;
+}
+.calendar-grid::before {
+    content: "Wed";
+    grid-column: 4;
+}
+.calendar-grid::before {
+    content: "Thu";
+    grid-column: 5;
+}
+.calendar-grid::before {
+    content: "Fri";
+    grid-column: 6;
+}
+.calendar-grid::before {
+    content: "Sat";
+    grid-column: 7;
+}
+
+.calendar-day {
+    min-height: 80px; /* Add minimum height */
+    padding: 0.75rem;
+}
+
+.calendar-day:hover {
+    border-color: var(--primary-color);
+    background: #f8f9fa;
+}
+
+.calendar-day.has-tweets {
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.calendar-day.has-tweets::after {
+    content: '';
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary-color);
+}
+
+.day-number {
+    font-size: 0.875rem;
+    color: #4a5568;
+}
+
+.day-tweets {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--primary-color);
+}
+
+/* Fix horizontal scroll issues */
+body {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    margin: 0;
+    padding: 0;
+}
+
+/* Fix calendar day headers */
+.calendar-header-day {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem;
+}
+
+/* Ensure all elements respect box-sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}

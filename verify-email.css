@@ -1,0 +1,103 @@
+.verify-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+}
+
+.verify-box {
+    background: white;
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.verify-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.verify-box h1 {
+    color: var(--text-color);
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+}
+
+.verify-box p {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.verify-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.resend-btn, .check-btn {
+    width: 100%;
+    padding: 0.875rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.resend-btn {
+    background: white;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.check-btn {
+    background: var(--primary-color);
+    border: none;
+    color: white;
+}
+
+.resend-btn:hover {
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.check-btn:hover {
+    background: var(--primary-dark);
+}
+
+.verify-info {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.refresh-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+}
+
+.refresh-btn:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .verify-box {
+        padding: 2rem 1.5rem;
+    }
+} 

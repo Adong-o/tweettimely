@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Schedule your tweets and analyze your X (Twitter) performance with TweetTimely, your powerful social media management tool">
+    <title>TweetTimely - Social Media Scheduling & Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add Twitter API SDK -->
+    <script src="https://platform.twitter.com/widgets.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">TweetTimely</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#testimonials">Reviews</a>
+            </div>
+            <div class="auth-section">
+                <button class="login-btn" onclick="window.location.href='auth.html'">
+                    <i class="fas fa-user"></i>
+                    Sign up / Login
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Transform Your X Presence</h1>
+                <p class="hero-subtitle">Schedule tweets, analyze performance, and grow your audience - all in one powerful platform.</p>
+                <div class="hero-cta">
+                    <button id="get-started" class="cta-button">Start Free Trial</button>
+                    <p class="cta-subtext">14 days free • No credit card required</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1M+</span>
+                        <span class="stat-label">Tweets Scheduled</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Customer Satisfaction</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="dashboard-preview.png" alt="TweetPro Dashboard" class="dashboard-preview">
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <h2 class="section-title">Why Choose TweetTimely?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Smart Analytics</h3>
+                    <p>Get deep insights into your performance with comprehensive analytics and audience metrics.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Smart Scheduling</h3>
+                    <p>Schedule tweets at optimal times based on your audience's activity patterns for maximum engagement.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Bulk Scheduling</h3>
+                    <p>Plan your content calendar ahead with our easy-to-use bulk scheduling tools.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Audience Targeting</h3>
+                    <p>Reach the right audience at the right time with smart targeting features.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="pricing-section">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Monthly Plan</h3>
+                        <div class="price-container">
+                            <div class="price">
+                                <span class="amount">$9.99</span>
+                                <span class="period">/month</span>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Unlimited scheduled tweets</li>
+                        <li>Advanced analytics</li>
+                        <li>Smart insights</li>
+                        <li>Custom integrations</li>
+                        <!--considering adding unlimited social accounts-->
+                        <li>24/7 priority support</li>
+                    </ul>
+                    <button class="pricing-cta">Get Started</button>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="popular-badge">Best Value</div>
+                    <div class="pricing-header">
+                        <h3>Yearly Plan</h3>
+                        <div class="price-container">
+                            <div class="price">
+                                <span class="amount">$80</span>
+                                <span class="period">/year</span>
+                            </div>
+                            <div class="savings">Save 33%</div>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Unlimited scheduled tweets</li>
+                        <li>Advanced analytics</li>
+                        <li>Smart insights</li>
+                        <li>Custom integrations</li>
+                       <!--considering adding unlimited social accounts-->
+                        <li>24/7 priority support</li>
+                    </ul>
+                    <button class="pricing-cta">Get Started</button>
+                </div>
+            </div>
+            <p class="pricing-guarantee">14-day free trial • Cancel anytime</p>
+        </section>
+
+        <section id="testimonials" class="testimonials-section">
+            <h2 class="section-title">What Our Users Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">❝</div>
+                    <div class="testimonial-content">
+                        <p>TweetTimely has completely transformed how we manage our social media. The smart scheduling feature is a game-changer!</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah Johnson">
+                        <div class="author-info">
+                            <p class="author-name">Sarah Johnson</p>
+                            <p class="author-title">Social Media Manager, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">❝</div>
+                    <div class="testimonial-content">
+                        <p>The analytics are incredibly detailed and help us make data-driven decisions. Best investment for our social strategy with TweetTimely.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Michael Chen">
+                        <div class="author-info">
+                            <p class="author-name">Michael Chen</p>
+                            <p class="author-title">Digital Marketing Lead, StartupX</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">❝</div>
+                    <div class="testimonial-content">
+                        <p>Simple, efficient, and powerful. We've seen a 40% increase in engagement since using TweetTimely's scheduling tools.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Emma Rodriguez">
+                        <div class="author-info">
+                            <p class="author-name">Emma Rodriguez</p>
+                            <p class="author-title">Content Creator, CreativeHub</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Social Media Strategy?</h2>
+                <p>Join thousands of social media managers who trust TweetTimely</p>
+                <button class="cta-button">Start Your Free Trial</button>
+                <p class="cta-subtext">No credit card required • 14-day free trial • Cancel anytime</p>
+            </div>
+        </section>
+
+        <!-- Dashboard section remains the same but hidden initially -->
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#testimonials">Reviews</a>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">Help Center</a>
+                <a href="#">API Docs</a>
+                <a href="#">Status</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 TweetTimely. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" aria-label="Twitter">𝕏</a>
+                <a href="#" aria-label="LinkedIn">in</a>
+                <a href="#" aria-label="GitHub">gh</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
