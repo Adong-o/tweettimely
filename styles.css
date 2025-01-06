@@ -614,7 +614,7 @@ html {
 
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 4rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -622,22 +622,34 @@ html {
 }
 
 .footer-section h4 {
-    color: var(--text-color);
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     margin-bottom: 1.5rem;
+    color: var(--text-color);
+    position: relative;
+}
+
+.footer-section h4::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--primary-color);
 }
 
 .footer-section a {
     display: block;
     color: #4a5568;
     text-decoration: none;
-    margin-bottom: 0.75rem;
-    transition: color 0.2s ease;
-    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+    font-size: 1.05rem;
 }
 
 .footer-section a:hover {
     color: var(--primary-color);
+    transform: translateX(5px);
 }
 
 .footer-bottom {

@@ -54,7 +54,7 @@ class TweetScheduler {
     handleLogin() {
         this.isAuthenticated = true;
         localStorage.setItem('twitter_auth', 'true');
-        window.location.href = 'dashboard.html';
+        window.location.href = '/dashboard';
     }
 
     handleLogout() {
@@ -146,3 +146,12 @@ class TweetScheduler {
 document.addEventListener('DOMContentLoaded', () => {
     new TweetScheduler();
 });
+
+// Example of JavaScript redirects
+function redirectToDashboard() {
+    window.location.href = '/dashboard';  // not '/dashboard.html'
+}
+
+function redirectToAuth() {
+    window.location.href = '/auth';  // not '/auth.html'
+}

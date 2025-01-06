@@ -18,11 +18,16 @@
                 <div class="logo">TweetTimely</div>
             </div>
             <div class="nav-links">
-                <a href="#schedule" class="active">Schedule</a>
-                <a href="#analytics">Analytics</a>
-                <a href="#settings">Settings</a>
+                <a href="/schedule">Schedule</a>
+                <a href="/analytics">Analytics</a>
+                <a href="/settings">Settings</a>
             </div>
             <div class="user-section">
+                <button id="connect-twitter" class="connect-twitter-btn" 
+                        onclick="console.log('Button clicked')">
+                    <span class="x-logo">𝕏</span>
+                    Connect X Account
+                </button>
                 <img src="https://randomuser.me/api/portraits/lego/1.jpg" alt="User" class="user-avatar">
                 <button id="logout-btn" class="logout-btn">Logout</button>
             </div>
@@ -170,6 +175,6 @@
         </main>
     </div>
 
-    <script src="dashboard.js"></script>
+    <script type="module" src="dashboard.js"></script>
 </body>
 </html> 

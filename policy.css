@@ -1,0 +1,297 @@
+:root {
+    --primary-color: #1DA1F2;
+    --primary-dark: #0d8ed9;
+    --text-color: #14171A;
+    --border-color: #E1E8ED;
+    --background-light: #f8f9fa;
+    --gradient-start: #f8f9fa;
+    --gradient-end: #ffffff;
+}
+
+body {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    min-height: 100vh;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.policy-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 60px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Enhanced Back Button */
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    margin: 0 0 40px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(29, 161, 242, 0.2);
+}
+
+.back-button i {
+    margin-right: 8px;
+    font-size: 0.9em;
+}
+
+.back-button:hover {
+    background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(29, 161, 242, 0.3);
+}
+
+/* Header Styles */
+.policy-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    font-weight: 800;
+    background: linear-gradient(45deg, var(--text-color), #2C3E50);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+}
+
+.last-updated {
+    display: inline-flex;
+    align-items: center;
+    color: #666;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    background: var(--background-light);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.last-updated i {
+    margin-right: 6px;
+    color: var(--primary-color);
+}
+
+/* Section Styles */
+.policy-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    border-radius: 12px;
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.policy-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+h2::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 24px;
+    background: var(--primary-color);
+    margin-right: 15px;
+    border-radius: 3px;
+}
+
+p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+}
+
+.policy-list {
+    margin: 1.5rem 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.policy-list li {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #4a5568;
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+    position: relative;
+}
+
+.policy-list li::before {
+    content: '•';
+    color: var(--primary-color);
+    position: absolute;
+    left: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.policy-container {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.policy-section {
+    animation: fadeIn 0.6s ease-out forwards;
+    animation-fill-mode: both;
+}
+
+.policy-section:nth-child(2) { animation-delay: 0.1s; }
+.policy-section:nth-child(3) { animation-delay: 0.2s; }
+.policy-section:nth-child(4) { animation-delay: 0.3s; }
+
+/* Top Border Decoration */
+.policy-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+    border-radius: 16px 16px 0 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .policy-container {
+        padding: 30px;
+        margin: 20px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    .policy-section {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .back-button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .policy-container {
+        box-shadow: none;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .back-button {
+        display: none;
+    }
+
+    .policy-section {
+        break-inside: avoid;
+        border: none;
+        padding: 0;
+        margin: 2rem 0;
+    }
+}
+
+/* Selection Style */
+::selection {
+    background: rgba(29, 161, 242, 0.2);
+    color: var(--primary-dark);
+}
+
+/* Enhanced list styling */
+.policy-list li strong {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+/* Section number badges */
+h2[class*="numbered"]::before {
+    content: counter(section);
+    counter-increment: section;
+    background: var(--primary-color);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Section hover enhancement */
+.policy-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.policy-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.policy-section:hover::after {
+    opacity: 1;
+}
+
+/* Print optimization */
+@media print {
+    .policy-section {
+        page-break-inside: avoid;
+    }
+    
+    .policy-list li {
+        page-break-inside: avoid;
+    }
+} 

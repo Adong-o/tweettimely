@@ -889,3 +889,74 @@ body {
 *, *::before, *::after {
     box-sizing: border-box;
 }
+
+/* Twitter Connect Button Styles */
+.connect-twitter-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #000000;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: auto;
+    justify-content: center;
+}
+
+.connect-twitter-btn .x-logo {
+    font-size: 1.1rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.connect-twitter-btn:hover {
+    background: #1DA1F2;
+    transform: translateY(-1px);
+}
+
+/* If the account is already connected */
+.connect-twitter-btn.connected {
+    background: #1DA1F2;
+}
+
+/* Success notification styles */
+.connection-success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    padding: 12px 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification.success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.notification i {
+    font-size: 1.2em;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

@@ -1,7 +1,10 @@
+import { twitterConfig } from './twitter-config.js';
+
 class DashboardManager {
     constructor() {
         this.scheduledTweets = [];
         this.init();
+        this.initializeTwitterConnect();
     }
 
     init() {
@@ -191,7 +194,9 @@ class DashboardManager {
 
     handleLogout() {
         localStorage.removeItem('twitter_auth');
-        window.location.href = 'index.html';
+        localStorage.removeItem('twitter_access_token');
+        localStorage.removeItem('twitter_refresh_token');
+        window.location.href = '/';
     }
 
     setupViewToggle() {
@@ -314,7 +319,179 @@ class DashboardManager {
         // Implement a modal or side panel to show tweets for the selected day
         console.log('Tweets for selected day:', tweets);
     }
+
+    initializeTwitterConnect() {
+        const connectButton = document.getElementById('connect-twitter');
+        if (connectButton) {
+            connectButton.addEventListener('click', () => this.handleTwitterConnect());
+            
+            // Check connection status when dashboard loads
+            const isConnected = localStorage.getItem('twitter_access_token');
+            this.updateTwitterConnectionState(!!isConnected);
+            
+            // If we just connected (coming back from callback)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('connected')) {
+                this.showConnectionSuccess();
+            }
+        }
+    }
+
+    async handleTwitterConnect() {
+        try {
+            console.log('Initiating Twitter connection...');
+            const state = this.generateRandomString(32);
+            const codeVerifier = this.generateRandomString(64);
+            
+            // Store state and code verifier
+            sessionStorage.setItem('twitter_oauth_state', state);
+            sessionStorage.setItem('twitter_code_verifier', codeVerifier);
+
+            // Generate code challenge
+            const encoder = new TextEncoder();
+            const data = encoder.encode(codeVerifier);
+            const digest = await crypto.subtle.digest('SHA-256', data);
+            const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(digest)))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/, '');
+
+            // Construct authorization URL with all required parameters
+            const params = new URLSearchParams({
+                response_type: 'code',
+                client_id: twitterConfig.clientId,
+                redirect_uri: twitterConfig.redirectUri,
+                scope: twitterConfig.scope,
+                state: state,
+                code_challenge: codeChallenge,
+                code_challenge_method: 'S256',
+                code_challenge_method: 'plain'
+            });
+
+            const authUrl = `${twitterConfig.authUrl}?${params.toString()}`;
+            console.log('Redirecting to:', authUrl);
+            window.location.href = authUrl;
+        } catch (error) {
+            console.error('Error in handleTwitterConnect:', error);
+        }
+    }
+
+    async loadTwitterAnalytics() {
+        const token = localStorage.getItem('twitter_access_token');
+        if (!token) return;
+
+        try {
+            // Fetch user metrics
+            const metricsResponse = await fetch('https://api.twitter.com/2/users/me/tweets/metrics', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const metricsData = await metricsResponse.json();
+
+            // Update analytics display
+            this.updateAnalyticsDisplay(metricsData);
+        } catch (error) {
+            console.error('Error loading Twitter analytics:', error);
+        }
+    }
+
+    updateAnalyticsDisplay(data) {
+        // Update engagement rate
+        const engagementRate = document.getElementById('engagement-rate');
+        if (engagementRate) {
+            engagementRate.textContent = `${(data.engagement_rate || 0).toFixed(1)}%`;
+        }
+
+        // Update impressions
+        const impressions = document.getElementById('impressions');
+        if (impressions) {
+            impressions.textContent = this.formatNumber(data.impression_count || 0);
+        }
+
+        // Update profile visits
+        const profileVisits = document.getElementById('profile-visits');
+        if (profileVisits) {
+            profileVisits.textContent = this.formatNumber(data.profile_visits || 0);
+        }
+    }
+
+    updateTwitterConnectionState(isConnected) {
+        const connectButton = document.getElementById('connect-twitter');
+        if (connectButton) {
+            if (isConnected) {
+                connectButton.classList.add('connected');
+                connectButton.innerHTML = `<span class="x-logo">𝕏</span> Connected`;
+            } else {
+                connectButton.classList.remove('connected');
+                connectButton.innerHTML = `<span class="x-logo">𝕏</span> Connect X Account`;
+            }
+        }
+    }
+
+    // Utility functions
+    generateRandomString(length) {
+        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let text = '';
+        for (let i = 0; i < length; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    }
+
+    async generateCodeChallenge(verifier) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(verifier);
+        const digest = await crypto.subtle.digest('SHA-256', data);
+        return btoa(String.fromCharCode(...new Uint8Array(digest)))
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_')
+            .replace(/=+$/, '');
+    }
+
+    formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        }
+        if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K';
+        }
+        return num.toString();
+    }
+
+    showConnectionSuccess() {
+        // You can customize this notification
+        const notification = document.createElement('div');
+        notification.className = 'connection-success';
+        notification.innerHTML = `
+            <div class="notification success">
+                <i class="fas fa-check-circle"></i>
+                Successfully connected to X!
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
 }
 
 // Initialize the dashboard
 const dashboard = new DashboardManager(); 
+
+// Update any navigation functions
+function navigateToSection(section) {
+    window.location.href = `/${section}`;  // not `${section}.html`
+} 
+
+// Update any navigation links
+const navLinks = document.querySelectorAll('.nav-links a');
+navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = e.target.getAttribute('href').replace('.html', '');
+        window.location.href = href;
+    });
+}); 

@@ -23,6 +23,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
+const actionCodeSettings = {
+    url: 'https://tweettimely.com/dashboard',
+    handleCodeInApp: true
+};
+
 export { 
     auth, 
     googleProvider, 
