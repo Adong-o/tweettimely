@@ -1,5 +1,17 @@
-const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const baseUrl = isDevelopment ? 'http://localhost:3000' : 'https://tweettimely.vercel.app';
+const getBaseUrl = () => {
+    // Check if running on GitHub Pages
+    if (window.location.hostname.includes('github.io')) {
+        return 'https://adong-o.github.io/tweettimely/';
+    }
+    // Check if running locally
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return 'http://localhost:3000';
+    }
+    // Default to Vercel
+    return 'https://tweettimely.vercel.app';
+};
+
+const baseUrl = getBaseUrl();
 
 export const twitterConfig = {
     clientId: 'SFdGVUZPcWtTN19FbHNFQ2RXT0s6MTpjaQ',
