@@ -1,14 +1,18 @@
 const getBaseUrl = () => {
-    // Check if running on GitHub Pages
-    if (window.location.hostname.includes('github.io')) {
-        return 'https://adong-o.github.io/tweettimely/';
+    const hostname = window.location.hostname;
+    
+    // Production Vercel URL (primary)
+    if (hostname === 'tweettimely.vercel.app') {
+        return 'https://tweettimely.vercel.app';
     }
-    // Check if running locally
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return 'http://localhost:3000';
+    
+    // GitHub Pages (backup)
+    if (hostname.includes('github.io')) {
+        return 'https://adong-o.github.io/tweettimely';
     }
-    // Default to Vercel
-    return 'https://tweettimely.vercel.app';
+    
+    // Local development
+    return 'http://localhost:3000';
 };
 
 const baseUrl = getBaseUrl();
