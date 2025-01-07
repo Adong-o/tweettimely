@@ -54,7 +54,7 @@ class TweetScheduler {
     handleLogin() {
         this.isAuthenticated = true;
         localStorage.setItem('twitter_auth', 'true');
-        window.location.href = '/dashboard';
+        window.location.href = './dashboard.html';
     }
 
     handleLogout() {
@@ -153,9 +153,9 @@ function handleNavigation(path) {
 }
 
 function redirectToDashboard() {
-    window.location.href = '/dashboard';  // not '/dashboard.html'
+    window.location.href = './dashboard.html';  // not '/dashboard.html'
 }
 
 function redirectToAuth() {
-    window.location.href = '/auth';  // not '/auth.html'
+    window.location.href = './auth.html';  // not '/auth.html'
 }

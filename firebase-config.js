@@ -24,7 +24,7 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
 const actionCodeSettings = {
-    url: 'https://tweettimely.com/dashboard',
+    url: 'https://tweettimely.vercel.app/dashboard.html', //https://tweettimely.com/dashboard.html
     handleCodeInApp: true
 };
 

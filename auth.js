@@ -9,8 +9,8 @@ import {
 } from './firebase-config.js';
 
 // Update redirect URLs
-const successRedirect = '/dashboard';  // not 'dashboard.html'
-const verifyEmailPath = '/verify-email';  // not 'verify-email.html'
+const successRedirect = './dashboard.html';  // not 'dashboard.html'
+const verifyEmailPath = './verify-email.html';  // not 'verify-email.html'
 
 document.addEventListener('DOMContentLoaded', () => {
     // Tab switching
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await signInWithPopup(auth, googleProvider);
             // User signed in successfully
             console.log('Google Sign in successful:', result.user);
-            window.location.href = 'dashboard.html';
+            window.location.href = './dashboard.html';
         } catch (error) {
             console.error('Google Sign in error:', error);
             alert(error.message);
@@ -81,10 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             if (!userCredential.user.emailVerified) {
-                window.location.href = 'verify-email.html';
+                window.location.href = './verify-email.html';
                 return;
             }
-            window.location.href = 'dashboard.html';
+            window.location.href = './dashboard.html';
         } catch (error) {
             console.error('Login error:', error);
             alert(error.message);
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayName: name
             });
             await sendEmailVerification(userCredential.user);
-            window.location.href = 'verify-email.html';
+            window.location.href = './verify-email.html';
         } catch (error) {
             console.error('Signup error:', error);
             alert(error.message);

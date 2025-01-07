@@ -8,12 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if user is logged in
     auth.onAuthStateChanged(user => {
         if (!user) {
-            window.location.href = 'auth.html';
+            window.location.href = './auth.html';
             return;
         }
 
         if (user.emailVerified) {
-            window.location.href = 'dashboard.html';
+            window.location.href = './dashboard.html';
         }
     });
 
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             await user.reload();
             if (user.emailVerified) {
-                window.location.href = 'dashboard.html';
+                window.location.href = './dashboard.html';
             } else {
                 alert('Email not verified yet. Please check your inbox and click the verification link.');
             }

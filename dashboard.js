@@ -195,7 +195,7 @@ class DashboardManager {
     handleLogout() {
         localStorage.removeItem('twitter_auth');
         localStorage.removeItem('twitter_access_token');
-        window.location.href = 'index.html';
+        window.location.href = './index.html';
     }
 
     setupViewToggle() {
