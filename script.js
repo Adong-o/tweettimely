@@ -148,6 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Example of JavaScript redirects
+function handleNavigation(path) {
+    window.location.href = `/${path}`;
+}
+
 function redirectToDashboard() {
     window.location.href = '/dashboard';  // not '/dashboard.html'
 }

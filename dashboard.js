@@ -195,7 +195,6 @@ class DashboardManager {
     handleLogout() {
         localStorage.removeItem('twitter_auth');
         localStorage.removeItem('twitter_access_token');
-        localStorage.removeItem('twitter_refresh_token');
         window.location.href = '/';
     }
 
@@ -491,7 +490,7 @@ const navLinks = document.querySelectorAll('.nav-links a');
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
-        const href = e.target.getAttribute('href').replace('.html', '');
+        const href = e.target.getAttribute('href');
         window.location.href = href;
     });
 }); 

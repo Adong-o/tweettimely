@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/auth", "dest": "/auth.html" },
+    { "src": "/dashboard", "dest": "/dashboard.html" },
+    { "src": "/callback", "dest": "/callback.html" },
+    { "src": "/about", "dest": "/about.html" },
+    { "src": "/(.*)", "dest": "/404.html" }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
+}
