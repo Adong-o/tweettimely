@@ -195,7 +195,7 @@ class DashboardManager {
     handleLogout() {
         localStorage.removeItem('twitter_auth');
         localStorage.removeItem('twitter_access_token');
-        window.location.href = '/';
+        window.location.href = 'index.html';
     }
 
     setupViewToggle() {
@@ -491,6 +491,6 @@ navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = e.target.getAttribute('href');
-        window.location.href = href;
+        window.location.href = href + '.html';
     });
 }); 

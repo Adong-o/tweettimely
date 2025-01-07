@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await signInWithPopup(auth, googleProvider);
             // User signed in successfully
             console.log('Google Sign in successful:', result.user);
-            window.location.href = '/dashboard';
+            window.location.href = 'dashboard.html';
         } catch (error) {
             console.error('Google Sign in error:', error);
             alert(error.message);
@@ -81,10 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             if (!userCredential.user.emailVerified) {
-                window.location.href = '/verify-email';
+                window.location.href = 'verify-email.html';
                 return;
             }
-            window.location.href = '/dashboard';
+            window.location.href = 'dashboard.html';
         } catch (error) {
             console.error('Login error:', error);
             alert(error.message);
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayName: name
             });
             await sendEmailVerification(userCredential.user);
-            window.location.href = '/verify-email';
+            window.location.href = 'verify-email.html';
         } catch (error) {
             console.error('Signup error:', error);
             alert(error.message);

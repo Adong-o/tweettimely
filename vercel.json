@@ -5,24 +5,6 @@
   "routes": [
     { "handle": "filesystem" },
     { "src": "/", "dest": "/index.html" },
-    { "src": "/auth", "dest": "/auth.html" },
-    { "src": "/dashboard", "dest": "/dashboard.html" },
-    { "src": "/callback", "dest": "/callback.html" },
-    { "src": "/about", "dest": "/about.html" },
-    { "src": "/privacy-policy", "dest": "/privacy-policy.html" },
-    { "src": "/terms-of-service", "dest": "/terms-of-service.html" },
-    { "src": "/cookie-policy", "dest": "/cookie-policy.html" },
-    { "src": "/(.*)", "dest": "/404.html" }
-  ],
-  "rewrites": [
-    { "source": "/auth", "destination": "/auth.html" },
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/callback", "destination": "/callback.html" },
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
-    { "source": "/terms-of-service", "destination": "/terms-of-service.html" },
-    { "source": "/cookie-policy", "destination": "/cookie-policy.html" }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
 }

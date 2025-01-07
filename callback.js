@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         sessionStorage.removeItem('twitter_code_verifier');
 
         // Use window.location.replace for a cleaner redirect
-        window.location.replace('/dashboard');
+        window.location.replace('/dashboard.html');
     } catch (error) {
         console.error('Error:', error);
         window.location.replace('/dashboard');
