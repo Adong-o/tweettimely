@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const state = params.get('state');
         
         if (!code) {
-            window.location.href = './dashboard.html';
+            window.location.replace('./dashboard.html');
             return;
         }
 
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const storedState = sessionStorage.getItem('twitter_oauth_state');
 
         if (state !== storedState) {
-            window.location.href = './dashboard.html';
+            window.location.replace('./dashboard.html');
             return;
         }
 
@@ -44,10 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         sessionStorage.removeItem('twitter_oauth_state');
         sessionStorage.removeItem('twitter_code_verifier');
 
-        // Use window.location.replace for a cleaner redirect
-        window.location.replace('./dashboard.html');
+        // Redirect to dashboard with success parameter
+        window.location.replace('./dashboard.html?connected=true');
     } catch (error) {
         console.error('Error:', error);
-        window.location.replace('./dashboard.html');
+        window.location.replace('./dashboard.html?error=true');
     }
 }); 
