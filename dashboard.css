@@ -921,7 +921,14 @@ body {
 
 /* If the account is already connected */
 .connect-twitter-btn.connected {
-    background: #1DA1F2;
+    background-color: #2ecc71;
+    cursor: default;
+    opacity: 0.8;
+}
+
+.connect-twitter-btn.connected:hover {
+    background-color: #2ecc71;
+    opacity: 0.8;
 }
 
 /* Success notification styles */
@@ -933,17 +940,27 @@ body {
 }
 
 .notification {
-    padding: 12px 24px;
-    border-radius: 8px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 5px;
+    color: white;
+    z-index: 9999;
+    animation: slideIn 0.5s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
-    gap: 8px;
-    animation: slideIn 0.3s ease-out;
+    gap: 10px;
+    min-width: 300px;
 }
 
 .notification.success {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #2ecc71;
+}
+
+.notification.error {
+    background-color: #e74c3c;
 }
 
 .notification i {
@@ -952,7 +969,7 @@ body {
 
 @keyframes slideIn {
     from {
-        transform: translateX(100%);
+        transform: translateX(120%);
         opacity: 0;
     }
     to {

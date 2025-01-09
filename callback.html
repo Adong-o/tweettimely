@@ -3,40 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authorizing... | TweetTimely</title>
-    <base href="/">
-    <style>
-        .callback-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-            padding: 20px;
-        }
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px 0;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    <title>Authenticating...</title>
 </head>
 <body>
-    <div class="callback-container">
-        <h1>Authorizing Your Account</h1>
-        <div class="loading-spinner"></div>
-        <p>Please wait while we complete the authorization process...</p>
-        <p>If not redirected, <a href="dashboard.html">click here</a></p>
-    </div>
-    <script src="callback.js"></script>
+    <p>Completing authentication...</p>
+    <script type="module" src="callback.js"></script>
 </body>
 </html> 

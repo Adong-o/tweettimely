@@ -6,16 +6,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         const code = params.get('code');
         const state = params.get('state');
         
+        console.log('Callback received:', { code, state }); // Debug log
+
         if (!code) {
-            window.location.replace('./dashboard.html');
+            console.error('No authorization code received');
+            window.location.replace('./dashboard.html?error=no_code');
             return;
         }
 
         const codeVerifier = sessionStorage.getItem('twitter_code_verifier');
         const storedState = sessionStorage.getItem('twitter_oauth_state');
 
+        console.log('Stored values:', { codeVerifier, storedState }); // Debug log
+
         if (state !== storedState) {
-            window.location.replace('./dashboard.html');
+            console.error('State mismatch:', { received: state, stored: storedState });
+            window.location.replace('./dashboard.html?error=invalid_state');
             return;
         }
 
@@ -33,21 +39,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             }).toString()
         });
 
+        console.log('Token response status:', tokenResponse.status); // Debug log
+
         if (!tokenResponse.ok) {
-            throw new Error('Token exchange failed');
+            const errorText = await tokenResponse.text();
+            console.error('Token exchange failed:', errorText);
+            window.location.replace('./dashboard.html?error=token_exchange_failed');
+            return;
         }
 
         const data = await tokenResponse.json();
+        console.log('Token received successfully'); // Debug log
+        
         localStorage.setItem('twitter_access_token', data.access_token);
         
         // Clean up
         sessionStorage.removeItem('twitter_oauth_state');
         sessionStorage.removeItem('twitter_code_verifier');
 
-        // Redirect to dashboard with success parameter
         window.location.replace('./dashboard.html?connected=true');
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Detailed error in callback:', error);
         window.location.replace('./dashboard.html?error=true');
     }
 }); 

@@ -324,15 +324,21 @@ class DashboardManager {
         if (connectButton) {
             connectButton.addEventListener('click', () => this.handleTwitterConnect());
             
-            // Check connection status when dashboard loads
+            // Check URL parameters for connection status
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('connected') === 'true') {
+                this.showConnectionSuccess();
+                // Remove the query parameter
+                window.history.replaceState({}, document.title, '/dashboard.html');
+            } else if (urlParams.get('error') === 'true') {
+                this.showConnectionError();
+                // Remove the query parameter
+                window.history.replaceState({}, document.title, '/dashboard.html');
+            }
+            
+            // Check if user is already connected
             const isConnected = localStorage.getItem('twitter_access_token');
             this.updateTwitterConnectionState(!!isConnected);
-            
-            // If we just connected (coming back from callback)
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('connected')) {
-                this.showConnectionSuccess();
-            }
         }
     }
 
@@ -417,14 +423,48 @@ class DashboardManager {
 
     updateTwitterConnectionState(isConnected) {
         const connectButton = document.getElementById('connect-twitter');
-        if (connectButton) {
+        const userSection = document.querySelector('.user-section');
+        
+        if (connectButton && userSection) {
             if (isConnected) {
-                connectButton.classList.add('connected');
-                connectButton.innerHTML = `<span class="x-logo">𝕏</span> Connected`;
+                // Option 1: Hide the button completely
+                connectButton.style.display = 'none';
+                
+                // Option 2: Or show as connected state
+                // connectButton.classList.add('connected');
+                // connectButton.innerHTML = `<span class="x-logo">𝕏</span> Connected`;
+                // connectButton.disabled = true;
+                
+                // Show user's Twitter info if available
+                this.loadTwitterUserInfo();
             } else {
+                connectButton.style.display = 'block';
                 connectButton.classList.remove('connected');
                 connectButton.innerHTML = `<span class="x-logo">𝕏</span> Connect X Account`;
+                connectButton.disabled = false;
             }
+        }
+    }
+
+    // Add this new method to load Twitter user info
+    async loadTwitterUserInfo() {
+        try {
+            const token = localStorage.getItem('twitter_access_token');
+            if (!token) return;
+
+            const response = await fetch('https://api.twitter.com/2/users/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+                // Update UI with user info if needed
+                console.log('Twitter user data:', userData);
+            }
+        } catch (error) {
+            console.error('Error loading Twitter user info:', error);
         }
     }
 
@@ -459,21 +499,52 @@ class DashboardManager {
     }
 
     showConnectionSuccess() {
-        // You can customize this notification
         const notification = document.createElement('div');
-        notification.className = 'connection-success';
+        notification.className = 'notification success';
         notification.innerHTML = `
-            <div class="notification success">
-                <i class="fas fa-check-circle"></i>
-                Successfully connected to X!
-            </div>
+            <i class="fas fa-check-circle"></i>
+            Successfully connected to Twitter!
         `;
         document.body.appendChild(notification);
         
-        // Remove notification after 3 seconds
         setTimeout(() => {
             notification.remove();
+            // Refresh the page or update UI
+            this.updateTwitterConnectionState(true);
         }, 3000);
+    }
+
+    showConnectionError() {
+        const notification = document.createElement('div');
+        notification.className = 'notification error';
+        
+        // Get the error type from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        let errorMessage = 'Failed to connect to Twitter. Please try again.';
+        
+        switch(urlParams.get('error')) {
+            case 'no_code':
+                errorMessage = 'Authorization code not received from Twitter.';
+                break;
+            case 'invalid_state':
+                errorMessage = 'Security verification failed. Please try again.';
+                break;
+            case 'token_exchange_failed':
+                errorMessage = 'Failed to exchange authorization code. Please try again.';
+                break;
+            default:
+                errorMessage = 'Failed to connect to Twitter. Please try again.';
+        }
+
+        notification.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            ${errorMessage}
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 5000); // Show for 5 seconds
     }
 }
 
