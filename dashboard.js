@@ -328,12 +328,12 @@ class DashboardManager {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('connected') === 'true') {
                 this.showConnectionSuccess();
-                // Remove the query parameter
-                window.history.replaceState({}, document.title, '/dashboard.html');
-            } else if (urlParams.get('error') === 'true') {
+                // Remove the query parameter but keep the correct domain
+                window.history.replaceState({}, document.title, `${baseUrl}/dashboard.html`);
+            } else if (urlParams.get('error')) {
                 this.showConnectionError();
-                // Remove the query parameter
-                window.history.replaceState({}, document.title, '/dashboard.html');
+                // Remove the query parameter but keep the correct domain
+                window.history.replaceState({}, document.title, `${baseUrl}/dashboard.html`);
             }
             
             // Check if user is already connected
@@ -344,24 +344,18 @@ class DashboardManager {
 
     async handleTwitterConnect() {
         try {
-            console.log('Initiating Twitter connection...');
-            const state = this.generateRandomString(32);
-            const codeVerifier = this.generateRandomString(64);
+            console.log('Starting Twitter connection...');
             
-            // Store state and code verifier
-            sessionStorage.setItem('twitter_oauth_state', state);
+            // Generate PKCE values
+            const codeVerifier = this.generateRandomString(64);
+            const codeChallenge = await this.generateCodeChallenge(codeVerifier);
+            
+            // Store PKCE verifier and state for verification
             sessionStorage.setItem('twitter_code_verifier', codeVerifier);
+            const state = this.generateRandomString(32);
+            sessionStorage.setItem('twitter_oauth_state', state);
 
-            // Generate code challenge
-            const encoder = new TextEncoder();
-            const data = encoder.encode(codeVerifier);
-            const digest = await crypto.subtle.digest('SHA-256', data);
-            const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(digest)))
-                .replace(/\+/g, '-')
-                .replace(/\//g, '_')
-                .replace(/=+$/, '');
-
-            // Construct authorization URL with all required parameters
+            // Construct authorization URL
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: twitterConfig.clientId,
@@ -369,8 +363,7 @@ class DashboardManager {
                 scope: twitterConfig.scope,
                 state: state,
                 code_challenge: codeChallenge,
-                code_challenge_method: 'S256',
-                code_challenge_method: 'plain'
+                code_challenge_method: 'S256'
             });
 
             const authUrl = `${twitterConfig.authUrl}?${params.toString()}`;
@@ -378,6 +371,7 @@ class DashboardManager {
             window.location.href = authUrl;
         } catch (error) {
             console.error('Error in handleTwitterConnect:', error);
+            this.showConnectionError();
         }
     }
 

@@ -1,30 +1,32 @@
 import { twitterConfig } from './twitter-config.js';
 
+const redirectToDashboard = (params = '') => {
+    const baseUrl = twitterConfig.callbackURL.split('/callback.html')[0];
+    window.location.replace(`${baseUrl}/dashboard.html${params}`);
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const params = new URLSearchParams(window.location.search);
         const code = params.get('code');
         const state = params.get('state');
         
-        console.log('Callback received:', { code, state }); // Debug log
-
         if (!code) {
             console.error('No authorization code received');
-            window.location.replace('./dashboard.html?error=no_code');
+            redirectToDashboard('?error=no_code');
             return;
         }
 
         const codeVerifier = sessionStorage.getItem('twitter_code_verifier');
         const storedState = sessionStorage.getItem('twitter_oauth_state');
 
-        console.log('Stored values:', { codeVerifier, storedState }); // Debug log
-
         if (state !== storedState) {
-            console.error('State mismatch:', { received: state, stored: storedState });
-            window.location.replace('./dashboard.html?error=invalid_state');
+            console.error('State mismatch');
+            redirectToDashboard('?error=invalid_state');
             return;
         }
 
+        // Exchange code for tokens
         const tokenResponse = await fetch(twitterConfig.tokenUrl, {
             method: 'POST',
             headers: {
@@ -39,27 +41,32 @@ document.addEventListener('DOMContentLoaded', async () => {
             }).toString()
         });
 
-        console.log('Token response status:', tokenResponse.status); // Debug log
-
         if (!tokenResponse.ok) {
             const errorText = await tokenResponse.text();
             console.error('Token exchange failed:', errorText);
-            window.location.replace('./dashboard.html?error=token_exchange_failed');
+            redirectToDashboard('?error=token_exchange_failed');
             return;
         }
 
-        const data = await tokenResponse.json();
-        console.log('Token received successfully'); // Debug log
+        const tokenData = await tokenResponse.json();
         
-        localStorage.setItem('twitter_access_token', data.access_token);
-        
-        // Clean up
-        sessionStorage.removeItem('twitter_oauth_state');
-        sessionStorage.removeItem('twitter_code_verifier');
+        // Store all tokens
+        localStorage.setItem('twitter_access_token', tokenData.access_token);
+        if (tokenData.refresh_token) {
+            localStorage.setItem('twitter_refresh_token', tokenData.refresh_token);
+        }
+        localStorage.setItem('twitter_bearer_token', twitterConfig.bearerToken);
+        localStorage.setItem('twitter_api_key', twitterConfig.apiKey);
+        localStorage.setItem('twitter_api_secret', twitterConfig.apiKeySecret);
 
-        window.location.replace('./dashboard.html?connected=true');
+        // Clean up
+        sessionStorage.removeItem('twitter_code_verifier');
+        sessionStorage.removeItem('twitter_oauth_state');
+
+        // Redirect with success
+        redirectToDashboard('?connected=true');
     } catch (error) {
-        console.error('Detailed error in callback:', error);
-        window.location.replace('./dashboard.html?error=true');
+        console.error('Error in callback:', error);
+        redirectToDashboard('?error=true');
     }
 }); 
