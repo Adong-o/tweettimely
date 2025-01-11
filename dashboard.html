@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://api.twitter.com;">
     <title>Dashboard | TweetTimely</title>
     <link rel="stylesheet" href="styles.css">
     <base href="/">
@@ -175,6 +176,6 @@
         </main>
     </div>
 
-    <script type="module" src="dashboard.js"></script>
+    <script type="module" src="./dashboard.js"></script>
 </body>
 </html> 

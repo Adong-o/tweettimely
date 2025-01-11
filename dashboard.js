@@ -329,11 +329,11 @@ class DashboardManager {
             if (urlParams.get('connected') === 'true') {
                 this.showConnectionSuccess();
                 // Remove the query parameter but keep the correct domain
-                window.history.replaceState({}, document.title, `${baseUrl}/dashboard.html`);
+                window.history.replaceState({}, document.title, `${twitterConfig.baseUrl}/dashboard.html`);
             } else if (urlParams.get('error')) {
                 this.showConnectionError();
                 // Remove the query parameter but keep the correct domain
-                window.history.replaceState({}, document.title, `${baseUrl}/dashboard.html`);
+                window.history.replaceState({}, document.title, `${twitterConfig.baseUrl}/dashboard.html`);
             }
             
             // Check if user is already connected
@@ -568,7 +568,7 @@ const dashboard = new DashboardManager();
 
 // Update any navigation functions
 function navigateToSection(section) {
-    window.location.href = `/${section}`;  // not `${section}.html`
+    window.location.href = `${twitterConfig.baseUrl}/${section}`;
 } 
 
 // Update any navigation links
@@ -577,6 +577,6 @@ navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = e.target.getAttribute('href');
-        window.location.href = href + '.html';
+        window.location.href = `${twitterConfig.baseUrl}/${href}`;
     });
 }); 

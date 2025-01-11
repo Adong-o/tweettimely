@@ -1,9 +1,4 @@
-const getBaseUrl = () => {
-    // Always use production URL
-    return 'https://tweettimely.vercel.app';
-};
-
-const baseUrl = getBaseUrl();
+const baseUrl = 'https://tweettimely.vercel.app';
 
 export const twitterConfig = {
     // OAuth 2.0 Credentials
@@ -20,12 +15,14 @@ export const twitterConfig = {
     accessTokenSecret: 'AtgxxqmMB9X5aeDZI0Nup3EjdFcDSUKCq8fIAvLWDrRW8',
     
     // OAuth Configuration
-    callbackURL: 'https://tweettimely.vercel.app/callback.html',
-    redirectUri: 'https://tweettimely.vercel.app/callback.html',
+    callbackURL: `${baseUrl}/callback.html`,
+    redirectUri: `${baseUrl}/callback.html`,
     scope: 'tweet.read tweet.write users.read offline.access',
     authUrl: 'https://twitter.com/i/oauth2/authorize',
     tokenUrl: 'https://api.twitter.com/2/oauth2/token',
     
     // Base URL for reference
-    baseUrl: 'https://tweettimely.vercel.app'
-}; 
+    baseUrl: baseUrl
+};
+
+export { baseUrl }; 
