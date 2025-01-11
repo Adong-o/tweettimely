@@ -355,16 +355,20 @@ class DashboardManager {
             const state = this.generateRandomString(32);
             sessionStorage.setItem('twitter_oauth_state', state);
 
-            // Construct authorization URL
+            // Construct authorization URL with all credentials
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: twitterConfig.clientId,
                 redirect_uri: twitterConfig.redirectUri,
-                scope: twitterConfig.scope,
+                scope: 'tweet.read tweet.write users.read offline.access',
                 state: state,
                 code_challenge: codeChallenge,
                 code_challenge_method: 'S256'
             });
+
+            // Add OAuth 1.0a credentials
+            params.append('oauth_consumer_key', twitterConfig.apiKey);
+            params.append('oauth_token', twitterConfig.accessToken);
 
             const authUrl = `${twitterConfig.authUrl}?${params.toString()}`;
             console.log('Redirecting to:', authUrl);
@@ -464,7 +468,7 @@ class DashboardManager {
 
     // Utility functions
     generateRandomString(length) {
-        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
         let text = '';
         for (let i = 0; i < length; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));

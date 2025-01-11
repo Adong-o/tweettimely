@@ -26,18 +26,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Exchange code for tokens
+        // Exchange code for tokens using both OAuth 2.0 and 1.0a credentials
         const tokenResponse = await fetch(twitterConfig.tokenUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Basic ${btoa(`${twitterConfig.clientId}:${twitterConfig.clientSecret}`)}`
+                'Authorization': `Basic ${btoa(`${twitterConfig.clientId}:${twitterConfig.clientSecret}`)}`,
+                'X-OAuth-Consumer-Key': twitterConfig.apiKey,
+                'X-OAuth-Token': twitterConfig.accessToken
             },
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code,
                 redirect_uri: twitterConfig.redirectUri,
-                code_verifier: codeVerifier
+                code_verifier: codeVerifier,
+                client_id: twitterConfig.clientId
             }).toString()
         });
 
@@ -52,12 +55,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Store all tokens
         localStorage.setItem('twitter_access_token', tokenData.access_token);
-        if (tokenData.refresh_token) {
-            localStorage.setItem('twitter_refresh_token', tokenData.refresh_token);
-        }
+        localStorage.setItem('twitter_refresh_token', tokenData.refresh_token);
         localStorage.setItem('twitter_bearer_token', twitterConfig.bearerToken);
         localStorage.setItem('twitter_api_key', twitterConfig.apiKey);
         localStorage.setItem('twitter_api_secret', twitterConfig.apiKeySecret);
+        localStorage.setItem('twitter_oauth_token', twitterConfig.accessToken);
+        localStorage.setItem('twitter_oauth_token_secret', twitterConfig.accessTokenSecret);
 
         // Clean up
         sessionStorage.removeItem('twitter_code_verifier');

@@ -9,7 +9,7 @@ import {
     updateProfile
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: "AIzaSyB6To1A-e7hknxX2ENReHEZN7dIqNYHYXs",
     authDomain: "tweettimely.firebaseapp.com",
     projectId: "tweettimely",
@@ -24,7 +24,9 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
 const actionCodeSettings = {
-    url: 'https://tweettimely.vercel.app/dashboard.html', //https://tweettimely.com/dashboard.html
+    url: window.location.hostname === 'localhost' 
+        ? `http://localhost:${window.location.port}/dashboard.html`
+        : 'https://tweettimely.vercel.app/dashboard.html',
     handleCodeInApp: true
 };
 
@@ -35,5 +37,6 @@ export {
     createUserWithEmailAndPassword, 
     signInWithPopup,
     sendEmailVerification,
-    updateProfile 
+    updateProfile,
+    actionCodeSettings
 }; 
