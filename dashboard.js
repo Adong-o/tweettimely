@@ -347,15 +347,19 @@ class DashboardManager {
             console.log('Starting Twitter connection...');
             
             // Generate PKCE values
-            const codeVerifier = this.generateRandomString(64);
+            const codeVerifier = this.generateRandomString(128);
+            console.log('Code Verifier:', codeVerifier);
+            
             const codeChallenge = await this.generateCodeChallenge(codeVerifier);
+            console.log('Code Challenge:', codeChallenge);
             
             // Store PKCE verifier and state for verification
             sessionStorage.setItem('twitter_code_verifier', codeVerifier);
             const state = this.generateRandomString(32);
             sessionStorage.setItem('twitter_oauth_state', state);
+            console.log('State:', state);
 
-            // Construct authorization URL with all credentials
+            // Construct authorization URL
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: twitterConfig.clientId,
@@ -366,16 +370,36 @@ class DashboardManager {
                 code_challenge_method: 'S256'
             });
 
-            // Add OAuth 1.0a credentials
-            params.append('oauth_consumer_key', twitterConfig.apiKey);
-            params.append('oauth_token', twitterConfig.accessToken);
+            const authUrl = `${twitterConfig.authUrl}?${params}`;
+            console.log('Full Auth URL:', authUrl);
+            
+            // Log all stored values before redirect
+            console.log('Stored values:', {
+                codeVerifier: sessionStorage.getItem('twitter_code_verifier'),
+                state: sessionStorage.getItem('twitter_oauth_state'),
+                redirectUri: twitterConfig.redirectUri
+            });
 
-            const authUrl = `${twitterConfig.authUrl}?${params.toString()}`;
-            console.log('Redirecting to:', authUrl);
             window.location.href = authUrl;
         } catch (error) {
-            console.error('Error in handleTwitterConnect:', error);
+            console.error('Detailed connection error:', error);
             this.showConnectionError();
+        }
+    }
+
+    async generateCodeChallenge(verifier) {
+        try {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(verifier);
+            const digest = await crypto.subtle.digest('SHA-256', data);
+            const base64 = btoa(String.fromCharCode(...new Uint8Array(digest)));
+            return base64
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=/g, '');
+        } catch (error) {
+            console.error('Code challenge generation error:', error);
+            throw error;
         }
     }
 
@@ -476,16 +500,6 @@ class DashboardManager {
         return text;
     }
 
-    async generateCodeChallenge(verifier) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(verifier);
-        const digest = await crypto.subtle.digest('SHA-256', data);
-        return btoa(String.fromCharCode(...new Uint8Array(digest)))
-            .replace(/\+/g, '-')
-            .replace(/\//g, '_')
-            .replace(/=+$/, '');
-    }
-
     formatNumber(num) {
         if (num >= 1000000) {
             return (num / 1000000).toFixed(1) + 'M';
@@ -520,7 +534,10 @@ class DashboardManager {
         const urlParams = new URLSearchParams(window.location.search);
         let errorMessage = 'Failed to connect to Twitter. Please try again.';
         
-        switch(urlParams.get('error')) {
+        const errorType = urlParams.get('error');
+        console.log('Error type:', errorType); // Debug log
+
+        switch(errorType) {
             case 'no_code':
                 errorMessage = 'Authorization code not received from Twitter.';
                 break;
@@ -542,7 +559,7 @@ class DashboardManager {
         
         setTimeout(() => {
             notification.remove();
-        }, 5000); // Show for 5 seconds
+        }, 5000);
     }
 }
 

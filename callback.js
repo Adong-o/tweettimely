@@ -1,8 +1,7 @@
 import { twitterConfig } from './twitter-config.js';
 
 const redirectToDashboard = (params = '') => {
-    const baseUrl = twitterConfig.callbackURL.split('/callback.html')[0];
-    window.location.replace(`${baseUrl}/dashboard.html${params}`);
+    window.location.replace(`https://tweettimely.vercel.app/dashboard.html${params}`);
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -10,6 +9,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const params = new URLSearchParams(window.location.search);
         const code = params.get('code');
         const state = params.get('state');
+        
+        console.log('Received callback with code:', code?.substring(0, 10) + '...'); // Debug log
         
         if (!code) {
             console.error('No authorization code received');
@@ -26,23 +27,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Exchange code for tokens using both OAuth 2.0 and 1.0a credentials
+        // Exchange code for tokens
         const tokenResponse = await fetch(twitterConfig.tokenUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Basic ${btoa(`${twitterConfig.clientId}:${twitterConfig.clientSecret}`)}`,
-                'X-OAuth-Consumer-Key': twitterConfig.apiKey,
-                'X-OAuth-Token': twitterConfig.accessToken
+                'Authorization': `Basic ${btoa(`${twitterConfig.clientId}:${twitterConfig.clientSecret}`)}`
             },
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code,
-                redirect_uri: twitterConfig.redirectUri,
-                code_verifier: codeVerifier,
-                client_id: twitterConfig.clientId
+                redirect_uri: 'https://tweettimely.vercel.app/callback.html',
+                code_verifier: codeVerifier
             }).toString()
         });
+
+        console.log('Token response status:', tokenResponse.status); // Debug log
 
         if (!tokenResponse.ok) {
             const errorText = await tokenResponse.text();
@@ -52,15 +52,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const tokenData = await tokenResponse.json();
+        console.log('Token exchange successful'); // Debug log
         
-        // Store all tokens
+        // Store tokens
         localStorage.setItem('twitter_access_token', tokenData.access_token);
-        localStorage.setItem('twitter_refresh_token', tokenData.refresh_token);
-        localStorage.setItem('twitter_bearer_token', twitterConfig.bearerToken);
-        localStorage.setItem('twitter_api_key', twitterConfig.apiKey);
-        localStorage.setItem('twitter_api_secret', twitterConfig.apiKeySecret);
-        localStorage.setItem('twitter_oauth_token', twitterConfig.accessToken);
-        localStorage.setItem('twitter_oauth_token_secret', twitterConfig.accessTokenSecret);
+        if (tokenData.refresh_token) {
+            localStorage.setItem('twitter_refresh_token', tokenData.refresh_token);
+        }
 
         // Clean up
         sessionStorage.removeItem('twitter_code_verifier');
@@ -69,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Redirect with success
         redirectToDashboard('?connected=true');
     } catch (error) {
-        console.error('Error in callback:', error);
+        console.error('Detailed callback error:', error);
         redirectToDashboard('?error=true');
     }
 }); 

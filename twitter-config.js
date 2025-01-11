@@ -1,8 +1,6 @@
 const getBaseUrl = () => {
-    if (window.location.hostname === 'tweettimely.vercel.app') {
-        return 'https://tweettimely.vercel.app';
-    }
-    return `http://localhost:${window.location.port}`;
+    // Always use production URL
+    return 'https://tweettimely.vercel.app';
 };
 
 const baseUrl = getBaseUrl();
@@ -22,9 +20,12 @@ export const twitterConfig = {
     accessTokenSecret: 'AtgxxqmMB9X5aeDZI0Nup3EjdFcDSUKCq8fIAvLWDrRW8',
     
     // OAuth Configuration
-    callbackURL: `${baseUrl}/callback.html`,
-    redirectUri: `${baseUrl}/callback.html`,
+    callbackURL: 'https://tweettimely.vercel.app/callback.html',
+    redirectUri: 'https://tweettimely.vercel.app/callback.html',
     scope: 'tweet.read tweet.write users.read offline.access',
     authUrl: 'https://twitter.com/i/oauth2/authorize',
-    tokenUrl: 'https://api.twitter.com/2/oauth2/token'
+    tokenUrl: 'https://api.twitter.com/2/oauth2/token',
+    
+    // Base URL for reference
+    baseUrl: 'https://tweettimely.vercel.app'
 }; 
