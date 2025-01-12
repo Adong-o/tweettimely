@@ -346,6 +346,12 @@ class DashboardManager {
         try {
             console.log('Starting Twitter connection...');
             
+            // Add delay to ensure storage is cleared
+            await Promise.all([
+                sessionStorage.removeItem('twitter_code_verifier'),
+                sessionStorage.removeItem('twitter_oauth_state')
+            ]);
+            
             // Generate PKCE values
             const codeVerifier = this.generateRandomString(128);
             const codeChallenge = await this.generateCodeChallenge(codeVerifier);
@@ -353,6 +359,9 @@ class DashboardManager {
             // Store PKCE verifier and state for verification
             sessionStorage.setItem('twitter_code_verifier', codeVerifier);
             const state = this.generateRandomString(32);
+            if (state.length !== 32) {
+                throw new Error('Generated state has incorrect length');
+            }
             sessionStorage.setItem('twitter_oauth_state', state);
 
             // Construct authorization URL
@@ -360,18 +369,27 @@ class DashboardManager {
                 response_type: 'code',
                 client_id: twitterConfig.clientId,
                 redirect_uri: twitterConfig.redirectUri,
-                scope: 'tweet.read tweet.write users.read offline.access',
+                scope: twitterConfig.scope,
                 state: state,
                 code_challenge: codeChallenge,
                 code_challenge_method: 'S256'
             });
 
             const authUrl = `${twitterConfig.authUrl}?${params}`;
+            
+            // Verify storage before redirect
+            const storedVerifier = sessionStorage.getItem('twitter_code_verifier');
+            const storedState = sessionStorage.getItem('twitter_oauth_state');
+            
+            if (!storedVerifier || !storedState) {
+                throw new Error('Failed to store OAuth state');
+            }
+            
             console.log('Redirecting to Twitter auth...');
             window.location.href = authUrl;
         } catch (error) {
             console.error('Connection error:', error);
-            this.showConnectionError();
+            this.showConnectionError(error.message);
         }
     }
 
@@ -514,7 +532,7 @@ class DashboardManager {
         }, 3000);
     }
 
-    showConnectionError() {
+    showConnectionError(message) {
         const notification = document.createElement('div');
         notification.className = 'notification error';
         
@@ -531,15 +549,53 @@ class DashboardManager {
             case 'token_exchange_failed':
                 errorMessage = 'Failed to exchange authorization code. Please try again.';
                 break;
+            case 'no_stored_state':
+                errorMessage = 'Session expired. Please try again.';
+                break;
+            case 'no_code_verifier':
+                errorMessage = 'Authentication data missing. Please try again.';
+                break;
+            case 'no_access_token':
+                errorMessage = 'Failed to get access token. Please try again.';
+                break;
+            case 'callback_error':
+                errorMessage = message || 'Authentication failed. Please try again.';
+                break;
         }
 
         notification.innerHTML = `
             <i class="fas fa-exclamation-circle"></i>
-            ${errorMessage}
+            ${this.escapeHtml(errorMessage)}
         `;
         document.body.appendChild(notification);
         
         setTimeout(() => notification.remove(), 5000);
+    }
+
+    escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Add error recovery helper
+    async retryOperation(operation, maxAttempts = 3) {
+        let lastError;
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                return await operation();
+            } catch (error) {
+                console.error(`Attempt ${attempt} failed:`, error);
+                lastError = error;
+                if (attempt < maxAttempts) {
+                    await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+                }
+            }
+        }
+        throw lastError;
     }
 }
 
