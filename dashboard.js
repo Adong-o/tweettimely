@@ -348,16 +348,12 @@ class DashboardManager {
             
             // Generate PKCE values
             const codeVerifier = this.generateRandomString(128);
-            console.log('Code Verifier:', codeVerifier);
-            
             const codeChallenge = await this.generateCodeChallenge(codeVerifier);
-            console.log('Code Challenge:', codeChallenge);
             
             // Store PKCE verifier and state for verification
             sessionStorage.setItem('twitter_code_verifier', codeVerifier);
             const state = this.generateRandomString(32);
             sessionStorage.setItem('twitter_oauth_state', state);
-            console.log('State:', state);
 
             // Construct authorization URL
             const params = new URLSearchParams({
@@ -371,18 +367,10 @@ class DashboardManager {
             });
 
             const authUrl = `${twitterConfig.authUrl}?${params}`;
-            console.log('Full Auth URL:', authUrl);
-            
-            // Log all stored values before redirect
-            console.log('Stored values:', {
-                codeVerifier: sessionStorage.getItem('twitter_code_verifier'),
-                state: sessionStorage.getItem('twitter_oauth_state'),
-                redirectUri: twitterConfig.redirectUri
-            });
-
+            console.log('Redirecting to Twitter auth...');
             window.location.href = authUrl;
         } catch (error) {
-            console.error('Detailed connection error:', error);
+            console.error('Connection error:', error);
             this.showConnectionError();
         }
     }
@@ -530,14 +518,10 @@ class DashboardManager {
         const notification = document.createElement('div');
         notification.className = 'notification error';
         
-        // Get the error type from URL
         const urlParams = new URLSearchParams(window.location.search);
         let errorMessage = 'Failed to connect to Twitter. Please try again.';
         
-        const errorType = urlParams.get('error');
-        console.log('Error type:', errorType); // Debug log
-
-        switch(errorType) {
+        switch(urlParams.get('error')) {
             case 'no_code':
                 errorMessage = 'Authorization code not received from Twitter.';
                 break;
@@ -547,8 +531,6 @@ class DashboardManager {
             case 'token_exchange_failed':
                 errorMessage = 'Failed to exchange authorization code. Please try again.';
                 break;
-            default:
-                errorMessage = 'Failed to connect to Twitter. Please try again.';
         }
 
         notification.innerHTML = `
@@ -557,9 +539,7 @@ class DashboardManager {
         `;
         document.body.appendChild(notification);
         
-        setTimeout(() => {
-            notification.remove();
-        }, 5000);
+        setTimeout(() => notification.remove(), 5000);
     }
 }
 

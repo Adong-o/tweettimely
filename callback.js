@@ -1,16 +1,15 @@
 import { twitterConfig } from './twitter-config.js';
 
 const redirectToDashboard = (params = '') => {
-    window.location.replace(`https://tweettimely.vercel.app/dashboard.html${params}`);
+    window.location.replace(`${twitterConfig.baseUrl}/dashboard.html${params}`);
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        console.log('Processing callback...');
         const params = new URLSearchParams(window.location.search);
         const code = params.get('code');
         const state = params.get('state');
-        
-        console.log('Received callback with code:', code?.substring(0, 10) + '...'); // Debug log
         
         if (!code) {
             console.error('No authorization code received');
@@ -18,16 +17,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const codeVerifier = sessionStorage.getItem('twitter_code_verifier');
         const storedState = sessionStorage.getItem('twitter_oauth_state');
-
         if (state !== storedState) {
             console.error('State mismatch');
             redirectToDashboard('?error=invalid_state');
             return;
         }
 
-        // Exchange code for tokens
+        const codeVerifier = sessionStorage.getItem('twitter_code_verifier');
+        console.log('Exchanging code for tokens...');
+
         const tokenResponse = await fetch(twitterConfig.tokenUrl, {
             method: 'POST',
             headers: {
@@ -37,12 +36,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code,
-                redirect_uri: 'https://tweettimely.vercel.app/callback.html',
+                redirect_uri: twitterConfig.redirectUri,
                 code_verifier: codeVerifier
             }).toString()
         });
-
-        console.log('Token response status:', tokenResponse.status); // Debug log
 
         if (!tokenResponse.ok) {
             const errorText = await tokenResponse.text();
@@ -52,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const tokenData = await tokenResponse.json();
-        console.log('Token exchange successful'); // Debug log
+        console.log('Token exchange successful');
         
         // Store tokens
         localStorage.setItem('twitter_access_token', tokenData.access_token);
@@ -67,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Redirect with success
         redirectToDashboard('?connected=true');
     } catch (error) {
-        console.error('Detailed callback error:', error);
+        console.error('Callback error:', error);
         redirectToDashboard('?error=true');
     }
 }); 
