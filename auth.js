@@ -1,12 +1,35 @@
 import { 
     auth, 
+    onAuthStateChanged,
     googleProvider, 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
     signInWithPopup 
 } from './firebase-config.js';
 
+// Add persistent auth check
+function checkAuthState() {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in
+            localStorage.setItem('user_email', user.email);
+            localStorage.setItem('user_id', user.uid);
+            window.location.href = './dashboard.html';
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if user is already logged in
+    const currentUser = auth.currentUser || localStorage.getItem('user_id');
+    if (currentUser) {
+        window.location.href = './dashboard.html';
+        return;
+    }
+
+    // Start auth state listener
+    checkAuthState();
+
     // Tab switching functionality
     const tabBtns = document.querySelectorAll('.tab-btn');
     const authForms = document.querySelectorAll('.auth-form');

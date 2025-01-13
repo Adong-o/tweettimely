@@ -1,12 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { 
     getAuth, 
+    onAuthStateChanged,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
     sendEmailVerification,
-    updateProfile
+    updateProfile,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 export const firebaseConfig = {
@@ -32,11 +34,13 @@ const actionCodeSettings = {
 
 export { 
     auth, 
+    onAuthStateChanged,
     googleProvider, 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
     signInWithPopup,
     sendEmailVerification,
     updateProfile,
+    signOut,
     actionCodeSettings
 }; 

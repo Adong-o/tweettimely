@@ -144,6 +144,13 @@ class TweetScheduler {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if user is already logged in
+    const isAuthenticated = localStorage.getItem('user_id');
+    if (isAuthenticated) {
+        window.location.href = '/dashboard.html';
+        return;
+    }
+
     new TweetScheduler();
 });
 

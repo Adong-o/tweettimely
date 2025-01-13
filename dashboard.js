@@ -1,10 +1,12 @@
 import { twitterConfig } from './twitter-config.js';
+import { auth } from './firebase-config.js';
 
 class DashboardManager {
     constructor() {
         this.scheduledTweets = [];
         this.init();
         this.initializeTwitterConnect();
+        this.checkAuthentication();
     }
 
     init() {
@@ -193,9 +195,22 @@ class DashboardManager {
     }
 
     handleLogout() {
-        localStorage.removeItem('twitter_auth');
-        localStorage.removeItem('twitter_access_token');
-        window.location.href = './index.html';
+        try {
+            // Clear all auth data
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('twitter_access_token');
+            localStorage.removeItem('twitter_refresh_token');
+            sessionStorage.clear();
+            
+            // Sign out from Firebase
+            auth.signOut();
+            
+            // Redirect to auth page
+            window.location.href = './index.html'; //was auth.html before changes
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
     }
 
     setupViewToggle() {
@@ -613,12 +628,27 @@ class DashboardManager {
         }
         throw lastError;
     }
+
+    checkAuthentication() {
+        const isAuthenticated = localStorage.getItem('user_id');
+        if (!isAuthenticated) {
+            // Not logged in, redirect to auth page
+            window.location.href = '/auth.html';
+            return;
+        }
+
+        // Check Twitter connection
+        const twitterToken = localStorage.getItem('twitter_access_token');
+        if (twitterToken) {
+            this.updateTwitterConnectionState(true);
+        }
+    }
 }
 
 // Initialize the dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.dashboard = new DashboardManager();
-    dashboard.initializeTwitterConnect(); // Initialize Twitter connection
+    dashboard.initializeEventListeners();
 });
 
 // Export for global access if needed
