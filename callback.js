@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        console.log('Callback URL:', window.location.href);
+        console.log('Stored state:', sessionStorage.getItem('twitter_oauth_state'));
+        console.log('Stored verifier:', sessionStorage.getItem('twitter_code_verifier'));
+
         console.log('Exchanging code for tokens...');
         const tokenResponse = await Promise.race([
             fetch(twitterConfig.tokenUrl, {
@@ -70,12 +74,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             )
         ]);
 
+        console.log('Token request payload:', {
+            code,
+            redirect_uri: twitterConfig.redirectUri,
+            client_id: twitterConfig.clientId,
+            code_verifier: codeVerifier
+        });
+
         if (!tokenResponse.ok) {
             const errorText = await tokenResponse.text();
             console.error('Token exchange failed:', {
                 status: tokenResponse.status,
                 statusText: tokenResponse.statusText,
-                error: errorText
+                error: errorText,
+                headers: Object.fromEntries([...tokenResponse.headers])
             });
             redirectToDashboard('?error=token_exchange_failed');
             return;

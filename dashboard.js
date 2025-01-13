@@ -346,25 +346,32 @@ class DashboardManager {
         try {
             console.log('Starting Twitter connection...');
             
-            // Add delay to ensure storage is cleared
-            await Promise.all([
-                sessionStorage.removeItem('twitter_code_verifier'),
-                sessionStorage.removeItem('twitter_oauth_state')
-            ]);
+            // Clear any existing state
+            sessionStorage.clear();
             
-            // Generate PKCE values
+            // Generate and store new state
             const codeVerifier = this.generateRandomString(128);
+            const state = this.generateRandomString(32);
+            
+            console.log('Generated values:', {
+                codeVerifier: codeVerifier.substring(0, 10) + '...',
+                state: state.substring(0, 10) + '...'
+            });
+            
+            // Store values
+            sessionStorage.setItem('twitter_code_verifier', codeVerifier);
+            sessionStorage.setItem('twitter_oauth_state', state);
+            
+            // Verify storage
+            console.log('Stored values:', {
+                storedVerifier: sessionStorage.getItem('twitter_code_verifier')?.substring(0, 10) + '...',
+                storedState: sessionStorage.getItem('twitter_oauth_state')?.substring(0, 10) + '...'
+            });
+
+            // Generate code challenge
             const codeChallenge = await this.generateCodeChallenge(codeVerifier);
             
-            // Store PKCE verifier and state for verification
-            sessionStorage.setItem('twitter_code_verifier', codeVerifier);
-            const state = this.generateRandomString(32);
-            if (state.length !== 32) {
-                throw new Error('Generated state has incorrect length');
-            }
-            sessionStorage.setItem('twitter_oauth_state', state);
-
-            // Construct authorization URL
+            // Build auth URL
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: twitterConfig.clientId,
@@ -376,16 +383,9 @@ class DashboardManager {
             });
 
             const authUrl = `${twitterConfig.authUrl}?${params}`;
-            
-            // Verify storage before redirect
-            const storedVerifier = sessionStorage.getItem('twitter_code_verifier');
-            const storedState = sessionStorage.getItem('twitter_oauth_state');
-            
-            if (!storedVerifier || !storedState) {
-                throw new Error('Failed to store OAuth state');
-            }
-            
-            console.log('Redirecting to Twitter auth...');
+            console.log('Auth URL:', authUrl);
+
+            // Redirect
             window.location.href = authUrl;
         } catch (error) {
             console.error('Connection error:', error);
