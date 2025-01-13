@@ -6,6 +6,9 @@ const redirectToDashboard = (params = '') => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        console.log('Full callback URL:', window.location.href);
+        console.log('Search params:', window.location.search);
+
         console.log('Processing callback...');
         const params = new URLSearchParams(window.location.search);
         const code = params.get('code');
@@ -52,6 +55,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Stored state:', sessionStorage.getItem('twitter_oauth_state'));
         console.log('Stored verifier:', sessionStorage.getItem('twitter_code_verifier'));
 
+        console.log('Token exchange details:', {
+            code: code?.substring(0, 10) + '...',
+            verifier: codeVerifier?.substring(0, 10) + '...',
+            state,
+            storedState,
+            redirectUri: twitterConfig.redirectUri
+        });
+
         console.log('Exchanging code for tokens...');
         const tokenResponse = await Promise.race([
             fetch(twitterConfig.tokenUrl, {
@@ -59,6 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept': 'application/json',
+                    'Authorization': `Basic ${btoa(twitterConfig.clientId + ':')}`,
                     'Origin': twitterConfig.baseUrl
                 },
                 body: new URLSearchParams({

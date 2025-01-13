@@ -347,31 +347,38 @@ class DashboardManager {
             console.log('Starting Twitter connection...');
             
             // Clear any existing state
-            sessionStorage.clear();
+            await this.retryOperation(async () => {
+                sessionStorage.clear();
+                
+                // Verify storage is cleared
+                const items = { ...sessionStorage };
+                if (Object.keys(items).length > 0) {
+                    throw new Error('Failed to clear session storage');
+                }
+            });
             
             // Generate and store new state
             const codeVerifier = this.generateRandomString(128);
             const state = this.generateRandomString(32);
             
-            console.log('Generated values:', {
-                codeVerifier: codeVerifier.substring(0, 10) + '...',
-                state: state.substring(0, 10) + '...'
-            });
-            
-            // Store values
-            sessionStorage.setItem('twitter_code_verifier', codeVerifier);
-            sessionStorage.setItem('twitter_oauth_state', state);
-            
-            // Verify storage
-            console.log('Stored values:', {
-                storedVerifier: sessionStorage.getItem('twitter_code_verifier')?.substring(0, 10) + '...',
-                storedState: sessionStorage.getItem('twitter_oauth_state')?.substring(0, 10) + '...'
+            // Store values with verification
+            await this.retryOperation(async () => {
+                sessionStorage.setItem('twitter_code_verifier', codeVerifier);
+                sessionStorage.setItem('twitter_oauth_state', state);
+                
+                // Verify storage
+                const storedVerifier = sessionStorage.getItem('twitter_code_verifier');
+                const storedState = sessionStorage.getItem('twitter_oauth_state');
+                
+                if (storedVerifier !== codeVerifier || storedState !== state) {
+                    throw new Error('Storage verification failed');
+                }
             });
 
             // Generate code challenge
             const codeChallenge = await this.generateCodeChallenge(codeVerifier);
             
-            // Build auth URL
+            // Build and verify auth URL
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: twitterConfig.clientId,
@@ -383,9 +390,18 @@ class DashboardManager {
             });
 
             const authUrl = `${twitterConfig.authUrl}?${params}`;
-            console.log('Auth URL:', authUrl);
+            
+            // Final verification before redirect
+            const finalCheck = {
+                verifier: sessionStorage.getItem('twitter_code_verifier'),
+                state: sessionStorage.getItem('twitter_oauth_state')
+            };
+            
+            if (!finalCheck.verifier || !finalCheck.state) {
+                throw new Error('Final storage verification failed');
+            }
 
-            // Redirect
+            console.log('Redirecting to Twitter auth...');
             window.location.href = authUrl;
         } catch (error) {
             console.error('Connection error:', error);
@@ -599,8 +615,14 @@ class DashboardManager {
     }
 }
 
-// Initialize the dashboard
-const dashboard = new DashboardManager(); 
+// Initialize the dashboard when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.dashboard = new DashboardManager();
+    dashboard.initializeTwitterConnect(); // Initialize Twitter connection
+});
+
+// Export for global access if needed
+window.DashboardManager = DashboardManager; 
 
 // Update any navigation functions
 function navigateToSection(section) {
